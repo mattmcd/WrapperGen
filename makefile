@@ -13,3 +13,6 @@ test01:
 
 test02:
 	java -cp $$CLASSPATH:classes Main test2.txt
+
+test03: 
+	java -cp $$CLASSPATH:classes Main test3.txt
