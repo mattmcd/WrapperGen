@@ -16,3 +16,9 @@ test02:
 
 test03: 
 	java -cp $$CLASSPATH:classes Main test3.txt
+
+appdir:
+	mkdir -p WrapperGen
+	mkdir -p WrapperGen/src/META-INF
+	mkdir -p WrapperGen/war/WEB-INF/classes
+	mkdir -p WrapperGen/war/WEB-INF/lib
