@@ -1,0 +1,150 @@
+group Python;
+
+function( name, retType, scalars, arrays, len) ::=<<
+<includes(name)>
+
+<docstrings(name)>
+
+<declare(name)>
+
+<methodDef(name)>
+
+<initFun(name)>
+
+<wrapperFun(...)>
+>>
+
+includes(name) ::=<<
+#include \<Python.h\>
+#include \<numpy/arrayobject.h\>
+#include "<name>.h"
+>>
+
+docstrings(name) ::=<<
+/* Docstrings */
+static char module_docstring[] = "";
+static char <name>_docstring[] = "";
+>>
+
+declare(name) ::=<<
+/* Available functions */
+static PyObject *<name>_<name>(PyObject *self, PyObject *args);
+>>
+
+methodDef(name) ::=<<
+/* Module specification */
+static PyMethodDef module_methods[] = {
+      {"<name>", <name>_<name>, METH_VARARGS, <name>_docstring},
+      {NULL, NULL, 0, NULL}
+};
+>>
+
+initFun(name) ::=<<
+/* Initialize the module */
+PyMODINIT_FUNC init_<name>(void)
+{
+  PyObject *m = Py_InitModule3("_<name>", module_methods, module_docstring);
+  if (m == NULL)
+    return;
+
+  /* Load `numpy` functionality. */
+  import_array();
+}
+>>
+
+wrapperFun() ::=<<
+static PyObject *<name>_<name>(PyObject *self, PyObject *args)
+{
+  /* Declare function arguments */
+  double <scalars; separator=", ">; 
+  PyObject <arrays:toPyObj():ptr(); separator=", ">;
+
+  /* Parse the input tuple */
+  if (!PyArg_ParseTuple(args, "<scalars:{d}><arrays:{0}>", <[scalars,arrays:toPyObj()]:{s| &<s>}; separator=", ">))
+    return NULL;
+
+  /* Interpret the input objects as numpy arrays. */
+  <arrays:mapInputArray(); separator="\n">
+
+  /* If that didn't work, throw an exception. */
+  if ( <arrays:{a | <toArray(a)> == NULL}; separator=" || "> ) {
+    <arrays:{a | Py_XDECREF(<toArray(a)>);}; separator="\n">
+      return NULL;
+  }  
+
+  /* Array length argument */
+  int <len> = (int) PyArray_DIM(<toArray(first(arrays))>, 0);
+
+  /* Get pointers to the data as C-types. */
+  <arrays:declareCArray(); separator="\n">
+
+  /* Call the external C function */
+  double value = <name>( <[scalars, arrays, len]; separator=", "> );
+
+  /* Clean up */ 
+  <arrays:cleanup(); separator="\n">
+
+  /* Build the output tuple */
+  PyObject *ret = Py_BuildValue( "d", value );
+  return ret;
+}
+>>
+
+scalarNames( arg ) ::=<<
+<if(arg.isScalar)><arg.name><endif>
+>>
+
+arrayNames( arg ) ::=<<
+<if(arg.isArray)><arg.name><endif>
+>>
+
+lengthNames( arg ) ::=<<
+<if(arg.isLen)>arg.name<endif>
+>>
+
+// Pointers in C code to Python array objects are suffixed _obj 
+toPyObj( name ) ::=<<
+<if(name)><name>_obj<endif>
+>>
+
+// Pointers in C code to C views of the Python arrays are suffixed _array
+toArray( name ) ::=<<
+<if(name)><name>_array<endif>
+>>
+
+ptr(name) ::=<<
+<if(name)>*<name><endif>
+>>
+
+argType( arg ) ::=<<
+<if(arg.isScalar)>d<elseif(arg.isArray)>0<endif>
+>>
+
+argRef( arg ) ::=<<
+<if(arg.isScalar)>&<arg.name><elseif(arg.isArray)>&<arg.name>_obj<endif>
+>>
+
+mapInputArray( array ) ::= <<
+PyObject *<toArray(array)> = PyArray_FROM_OTF(<toPyObj(array)>, NPY_DOUBLE, NPY_IN_ARRAY);
+>>
+
+declareCArray( name ) ::= <<
+double *<name> = (double *)PyArray_DATA(<toArray(name)>);
+>>
+
+cleanup( name )::=<<
+Py_DECREF(<toArray(name)>);
+>>
+
+arg( name, isArray, isLen) ::= << 
+[
+  "name" : <name>,
+  "isArray" : <isArray>,
+  "isScalar" : <isScalar>,
+  "isLen" : <isLen>
+]
+>>
+
+double_type( )::="double"
+
+array_type()::="double *"
