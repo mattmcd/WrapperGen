@@ -1,6 +1,6 @@
 group Python;
 
-function( name, retType, scalars, arrays, len) ::=<<
+function( name, scalars, arrays, len) ::=<<
 <includes(name)>
 
 <docstrings(name)>
@@ -90,18 +90,6 @@ static PyObject *<name>_<name>(PyObject *self, PyObject *args)
 }
 >>
 
-scalarNames( arg ) ::=<<
-<if(arg.isScalar)><arg.name><endif>
->>
-
-arrayNames( arg ) ::=<<
-<if(arg.isArray)><arg.name><endif>
->>
-
-lengthNames( arg ) ::=<<
-<if(arg.isLen)>arg.name<endif>
->>
-
 // Pointers in C code to Python array objects are suffixed _obj 
 toPyObj( name ) ::=<<
 <if(name)><name>_obj<endif>
@@ -112,16 +100,8 @@ toArray( name ) ::=<<
 <if(name)><name>_array<endif>
 >>
 
-ptr(name) ::=<<
+ptr( name ) ::=<<
 <if(name)>*<name><endif>
->>
-
-argType( arg ) ::=<<
-<if(arg.isScalar)>d<elseif(arg.isArray)>0<endif>
->>
-
-argRef( arg ) ::=<<
-<if(arg.isScalar)>&<arg.name><elseif(arg.isArray)>&<arg.name>_obj<endif>
 >>
 
 mapInputArray( array ) ::= <<
@@ -144,7 +124,3 @@ arg( name, isArray, isLen) ::= <<
   "isLen" : <isLen>
 ]
 >>
-
-double_type( )::="double"
-
-array_type()::="double *"

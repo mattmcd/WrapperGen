@@ -6,9 +6,9 @@ options {
   output = template;
 }
 
-function  : 	^(FUNCTION (n=name) ^(RETTYPE (r=retType)) 
+function  : 	^(FUNCTION (n=name) ^(RETTYPE (retType)) 
                 ^(INARGS ((s+=scalar)* ((ar+=array)+ l=len)? ) ) )
-	->function(name={$n.st}, retType={$r.st},   
+	->function(name={$n.st},    
       scalars={$s}, arrays={$ar}, len={$l.st} );
 
 // args      :	 (a+=arg)* -> { $a };
@@ -19,8 +19,8 @@ array     : ^(ARRAY name) -> {$name.st};
 
 len       : ^(ARRAYLEN name) -> {$name.st};
 
-retType	  :SCALAR -> double_type()
-	        |ARRAY -> array_type()
+retType	  :SCALAR 
+	        |ARRAY 
 	        ;
 
 name	    : ID -> {%{$ID.text}};
