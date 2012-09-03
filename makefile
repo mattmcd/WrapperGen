@@ -3,10 +3,13 @@ all: CFunction.g WrapperWalker.g
 	mkdir -p classes
 	java org.antlr.Tool -o generated CFunction.g
 	java org.antlr.Tool -o generated WrapperWalker.g
-	javac -cp $$CLASSPATH:generated -d classes Main.java generated/*.java
+	javac -cp $$CLASSPATH:generated -d classes Main.java WrapperGen.java generated/*.java
 
 run:
 	java -cp $$CLASSPATH:classes Main test2.txt
+
+jar:
+	jar cfm wrappergen.jar manifest.txt -C classes .
 
 test01:
 	java -cp $$CLASSPATH:classes Main test.txt
