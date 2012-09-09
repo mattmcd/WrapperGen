@@ -5,7 +5,12 @@ import java.io.FileReader;
 
 public class WrapperGen {
 
+  
   public static String generate( CharStream input ) throws Exception {
+    return generate( input, "PythonWrapper.stg");
+  }
+
+  public static String generate( CharStream input, String templateFile ) throws Exception {
     CFunctionLexer lex = new CFunctionLexer(input);
     CommonTokenStream tokens = new CommonTokenStream(lex);
     // System.out.println("tokens="+tokens);
@@ -16,7 +21,7 @@ public class WrapperGen {
     CommonTreeNodeStream nodes = new CommonTreeNodeStream( t );
     nodes.setTokenStream( tokens );
 
-    FileReader groupFileR = new FileReader( "PythonWrapper.stg" );
+    FileReader groupFileR = new FileReader( templateFile );
     StringTemplateGroup templates = new StringTemplateGroup( groupFileR );
     groupFileR.close();
 
