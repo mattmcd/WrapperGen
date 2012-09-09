@@ -34,8 +34,8 @@ static PyObject *<name>_<name>(PyObject *self, PyObject *args);
 methodDef(name) ::=<<
 /* Module specification */
 static PyMethodDef module_methods[] = {
-      {"<name>", <name>_<name>, METH_VARARGS, <name>_docstring},
-      {NULL, NULL, 0, NULL}
+    {"<name>", <name>_<name>, METH_VARARGS, <name>_docstring},
+    {NULL, NULL, 0, NULL}
 };
 >>
 
@@ -43,50 +43,50 @@ initFun(name) ::=<<
 /* Initialize the module */
 PyMODINIT_FUNC init_<name>(void)
 {
-  PyObject *m = Py_InitModule3("_<name>", module_methods, module_docstring);
-  if (m == NULL)
-    return;
+    PyObject *m = Py_InitModule3("_<name>", module_methods, module_docstring);
+    if (m == NULL)
+      return;
 
-  /* Load `numpy` functionality. */
-  import_array();
+    /* Load `numpy` functionality. */
+    import_array();
 }
 >>
 
 wrapperFun() ::=<<
 static PyObject *<name>_<name>(PyObject *self, PyObject *args)
 {
-  /* Declare function arguments */
-  double <scalars; separator=", ">; 
-  PyObject <arrays:toPyObj():ptr(); separator=", ">;
+    /* Declare function arguments */
+    double <scalars; separator=", ">; 
+    PyObject <arrays:toPyObj():ptr(); separator=", ">;
 
-  /* Parse the input tuple */
-  if (!PyArg_ParseTuple(args, "<scalars:{d}><arrays:{0}>", <[scalars,arrays:toPyObj()]:{s| &<s>}; separator=", ">))
-    return NULL;
-
-  /* Interpret the input objects as numpy arrays. */
-  <arrays:mapInputArray(); separator="\n">
-
-  /* If that didn't work, throw an exception. */
-  if ( <arrays:{a | <toArray(a)> == NULL}; separator=" || "> ) {
-    <arrays:{a | Py_XDECREF(<toArray(a)>);}; separator="\n">
+    /* Parse the input tuple */
+    if (!PyArg_ParseTuple(args, "<scalars:{d}><arrays:{O}>", <[scalars,arrays:toPyObj()]:{s| &<s>}; separator=", ">))
       return NULL;
-  }  
 
-  /* Array length argument */
-  int <len> = (int) PyArray_DIM(<toArray(first(arrays))>, 0);
+    /* Interpret the input objects as numpy arrays. */
+    <arrays:mapInputArray(); separator="\n">
 
-  /* Get pointers to the data as C-types. */
-  <arrays:declareCArray(); separator="\n">
+    /* If that didn't work, throw an exception. */
+    if ( <arrays:{a | <toArray(a)> == NULL}; separator=" || "> ) {
+      <arrays:{a | Py_XDECREF(<toArray(a)>);}; separator="\n">
+        return NULL;
+    }  
 
-  /* Call the external C function */
-  double value = <name>( <[scalars, arrays, len]; separator=", "> );
+    /* Array length argument */
+    int <len> = (int) PyArray_DIM(<toArray(first(arrays))>, 0);
 
-  /* Clean up */ 
-  <arrays:cleanup(); separator="\n">
+    /* Get pointers to the data as C-types. */
+    <arrays:declareCArray(); separator="\n">
 
-  /* Build the output tuple */
-  PyObject *ret = Py_BuildValue( "d", value );
-  return ret;
+    /* Call the external C function */
+    double value = <name>( <[scalars, arrays, len]; separator=", "> );
+
+    /* Clean up */ 
+    <arrays:cleanup(); separator="\n">
+
+    /* Build the output tuple */
+    PyObject *ret = Py_BuildValue( "d", value );
+    return ret;
 }
 >>
 
