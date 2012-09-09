@@ -12,5 +12,7 @@
         <servlet-name>Wrapper</servlet-name>
         <url-pattern>/Wrapper</url-pattern>
     </servlet-mapping>
-
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
 </web-app>

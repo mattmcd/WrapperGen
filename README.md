@@ -3,9 +3,14 @@ WrapperGen
 
 Code generator for function wrapper code to interface between languages e.g. C to Python
 
+This project was mainly intended as a personal learning experience in using 
+[ANTLR](http://www.antlr.org),
+[StringTemplate](http://www.stringtemplate.org) and 
+[Google App Engine](http://developers.google.com/appengine/).
+
 C wrapper for Python is based on the blog post by [Dan Foreman-Mackey](http://danfm.ca/posts/python-c-extensions/).  
 Initial iteration only supports C functions returning scalar double and
-having arguments (all scalars, all arrays, single length argument).
+having arguments (all scalars, all arrays, single length argument). 
 
 Dependencies
 ============
