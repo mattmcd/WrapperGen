@@ -1,6 +1,4 @@
 import java.io.IOException;
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.ANTLRStringStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,21 +9,22 @@ public class MyServlet extends HttpServlet {
   public void doGet(HttpServletRequest req, HttpServletResponse resp)
     throws IOException {
       resp.setContentType("text/plain");
-      resp.getWriter().println("Hello, world");
+      resp.getWriter().println("POST input");
     }
   
   public void doPost(HttpServletRequest req, HttpServletResponse resp)
     throws IOException {
-      String name = req.getParameter( "name" );
-
-      CharStream is = new ANTLRStringStream( name );
+      String input = req.getParameter( "input" );
 
       String processed;
+      
+      // Name of template file to use
       String filename = "/WEB-INF/PythonWrapper.stg";
       ServletContext context = this.getServletContext();
       String pathname = context.getRealPath( filename );
+      
       try {
-        processed = WrapperGen.generate( is, pathname );
+        processed = WrapperGen.generate( input, pathname );
       }
       catch ( Exception e ) {
         processed = "FAIL:" + e.getMessage();

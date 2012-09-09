@@ -5,7 +5,18 @@ import java.io.FileReader;
 
 public class WrapperGen {
 
-  
+  public static String generate( String input, String templateFile ) 
+  throws Exception {
+      CharStream is = new ANTLRStringStream( input );
+      return generate( is, templateFile );
+  }
+
+  public static String generate( String input ) 
+  throws Exception {
+      CharStream is = new ANTLRStringStream( input );
+      return generate( is );
+  }
+
   public static String generate( CharStream input ) throws Exception {
     return generate( input, "PythonWrapper.stg");
   }
