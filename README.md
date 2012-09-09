@@ -17,6 +17,13 @@ Dependencies
 [ANTLRWorks](http://www.antlr.org/works/index.html) must be on the Java
 classpath.  Version 1.4.3 was the version used.
 
+Online
+======
+Try it at [wrappergen.appspot.com](http://wrappergen.appspot.com) or POST
+directly e.g.
+
+    curl http://wrappergen.appspot.com/Wrapper -d input="double test(double a, double b, double *c, int n)"
+
 Example
 =======
 

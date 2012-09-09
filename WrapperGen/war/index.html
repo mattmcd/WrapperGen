@@ -7,6 +7,13 @@
   Code generator for function wrapper code to interface between languages
   e.g. C to Python.
   </p>
+  <p>This project was mainly intended as a personal learning experience in
+  using 
+  <a href="http://www.antlr.org">ANTLR</a>,
+  <a href="http://www.stringtemplate.org">StringTemplate</a> and 
+  <a href="http://developers.google.com/appengine/">Google App
+  Engine</a>.
+  </p>
   <p>
   C wrapper for Python is based on the blog post by 
   <a href="http://danfm.ca/posts/python-c-extensions/">Dan Foreman-Mackey</a>.
@@ -21,5 +28,17 @@
     </div>
     <div><input type="submit" value="Generate Wrapper"/></div>
   </form>
+  <p>
+
+  <p>
+    Example direct use: 
+    <pre>
+      curl http://wrappergen.appspot.com/Wrapper -d input="double f(double a, double *b, int n)"
+    </pre>
+  </p>
+  <p>
+    Contact: Tweet <a href="http://twitter.com/mattmcd">mattmcd</a> or fork
+    on <a href="http://github.com/mattmcd/WrapperGen">GitHub</a>.
+  </p>
 </BODY>
 </HTML>
