@@ -11,10 +11,11 @@ run:
 jar:
 	jar cfm wrappergen.jar manifest.txt -C classes .
 
-deploy: wrappergen.jar PythonWrapper.stg
+deploy: wrappergen.jar PythonWrapper.stg MEXWrapper.stg
 	cp wrappergen.jar WrapperGen/war/WEB-INF/lib
 	cp antlrworks-1.4.3.jar WrapperGen/war/WEB-INF/lib
 	cp PythonWrapper.stg WrapperGen/war/WEB-INF
+	cp MEXWrapper.stg WrapperGen/war/WEB-INF
 
 test01:
 	java -cp $$CLASSPATH:classes Main test.txt

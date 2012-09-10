@@ -16,10 +16,22 @@ public class MyServlet extends HttpServlet {
     throws IOException {
       String input = req.getParameter( "input" );
 
+      String outType = req.getParameter( "generate" );
+
       String processed;
       
       // Name of template file to use
-      String filename = "/WEB-INF/PythonWrapper.stg";
+
+      String filename;
+      if ( outType != null ) {
+        if ( outType.equals( "MEX") ) {
+          filename = "/WEB-INF/MEXWrapper.stg";
+        } else {
+          filename = "/WEB-INF/PythonWrapper.stg";
+        }
+      } else {
+        filename = "/WEB-INF/PythonWrapper.stg";
+      }
       ServletContext context = this.getServletContext();
       String pathname = context.getRealPath( filename );
       
