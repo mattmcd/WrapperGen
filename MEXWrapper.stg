@@ -1,0 +1,41 @@
+group Python;
+
+function( name, scalars, arrays, len) ::=<<
+<includes(name)>
+
+<wrapperFun(...)>
+>>
+
+includes(name) ::=<<
+#include "mex.h" 
+#include "<name>.h"
+>>
+
+wrapperFun() ::=<<
+void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
+{
+    /* Declare function arguments */
+    <scalars:{s| double <s>;}; separator="\n"> 
+    <arrays:{s| double *<s>;}; separator="\n"> 
+    
+    /* Initialise from input */
+    <scalars:{s| <s> = mxGetScalar( prhs[<i0>] );}; separator="\n"> 
+    <arrays:{s| <s> = mxGetPtr( prhs[<length(scalars)> + <i0>] );}; separator="\n"> 
+    
+    /* Parse the input tuple */
+    if ( nrhs != <length([scalars,arrays])>) {
+      mexErrMsgTxt("<length([scalars,arrays])> input arguments required");
+    } else if ( nlhs != 1 ) {
+      mexErrMsgTxt("1 output argument required");
+    }
+
+    /* Create output argument */
+    double out;
+
+    out = <name>( <[scalars, arrays]; separator=", ">);
+
+    plhs[0] = mxCreateDoubleScalar(out);
+    
+    return;
+}
+>>

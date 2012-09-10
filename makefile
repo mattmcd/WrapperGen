@@ -22,6 +22,9 @@ test01:
 test02:
 	java -cp $$CLASSPATH:classes Main test2.txt
 
+test02mex:
+	java -cp $$CLASSPATH:classes Main test2.txt MEXWrapper.stg
+
 test03: 
 	java -cp $$CLASSPATH:classes Main test3.txt
 
