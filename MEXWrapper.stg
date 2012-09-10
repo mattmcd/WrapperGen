@@ -18,9 +18,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     <scalars:{s| double <s>;}; separator="\n"> 
     <arrays:{s| double *<s>;}; separator="\n"> 
     
-    /* Initialise from input */
-    <scalars:{s| <s> = mxGetScalar( prhs[<i0>] );}; separator="\n"> 
-    <arrays:{s| <s> = mxGetPtr( prhs[<length(scalars)> + <i0>] );}; separator="\n"> 
+    /* Length of array(s) */
+    int <len>; 
+
+    /* Create output argument */
+    double out;
     
     /* Parse the input tuple */
     if ( nrhs != <length([scalars,arrays])>) {
@@ -28,11 +30,14 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     } else if ( nlhs != 1 ) {
       mexErrMsgTxt("1 output argument required");
     }
+    
+    /* Initialise from input */
+    <scalars:{s| <s> = mxGetScalar( prhs[<i0>] );}; separator="\n"> 
+    <arrays:{s| <s> = mxGetPr( prhs[<length(scalars)> + <i0>] );}; separator="\n"> 
+    
+    /* <len> = get array length */ 
 
-    /* Create output argument */
-    double out;
-
-    out = <name>( <[scalars, arrays]; separator=", ">);
+    out = <name>( <[scalars, arrays, len]; separator=", ">);
 
     plhs[0] = mxCreateDoubleScalar(out);
     
