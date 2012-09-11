@@ -35,7 +35,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     <scalars:{s| <s> = mxGetScalar( prhs[<i0>] );}; separator="\n"> 
     <arrays:{s| <s> = mxGetPr( prhs[<length(scalars)> + <i0>] );}; separator="\n"> 
     
-    /* <len> = get array length */ 
+    /* <len> = get array length, assuming vector */ 
+    <len> = mxGetM(<firstArray()>) * mxGetN(<firstArray()>);
 
     out = <name>( <[scalars, arrays, len]; separator=", ">);
 
@@ -43,4 +44,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     
     return;
 }
+>>
+
+firstArray( ) ::=<<
+prhs[<length(scalars)>]
 >>
