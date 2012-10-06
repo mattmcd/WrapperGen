@@ -120,7 +120,7 @@ arg( name, isArray, isLen) ::= <<
 [
   "name" : <name>,
   "isArray" : <isArray>,
-  "isScalar" : <isScalar>, 
+  "isScalar" : <isScalar>,
   "isLen" : <isLen>
 ]
 >>
