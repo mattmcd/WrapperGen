@@ -1,12 +1,21 @@
-all: CFunction.g WrapperWalker.g 
+all: CFunction.g WrapperWalker.g
 	mkdir -p generated
 	mkdir -p classes
-	java org.antlr.Tool -o generated CFunction.g
-	java org.antlr.Tool -o generated WrapperWalker.g
-	javac -cp $$CLASSPATH:generated -d classes Main.java WrapperGen.java generated/*.java
+	antlr -o generated CFunction.g
+	antlr -o generated WrapperWalker.g
+	javac -cp $(CLASSPATH):generated -d classes Main.java WrapperGen.java generated/*.java
 
+v4:	CFunction.g4
+	mkdir -p generatedV4
+	mkdir -p classesV4
+	antlr4 -o generatedV4 CFunction.g4
+	javac -cp $(CLASSPATH):generatedv4 -d classesV4 MainV4.java WrapperGenV4.java generatedV4/*.java
+	
 run:
-	java -cp $$CLASSPATH:classes Main test2.txt
+	java -cp $(CLASSPATH):classes Main test2.txt
+
+runV4:
+	java -cp $(CLASSPATH):classesV4 MainV4 test2.txt
 
 jar:
 	jar cfm wrappergen.jar manifest.txt -C classes .
