@@ -1,6 +1,6 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
-// import org.antlr.v4.stringtemplate.*;
+import org.antlr.stringtemplate.*;
 import java.io.FileReader;
 
 public class WrapperGenV4 {
@@ -27,14 +27,15 @@ public class WrapperGenV4 {
     CFunctionParser parser = new CFunctionParser(tokens);
     ParseTree tree = parser.function();
 
-    /*
     FileReader groupFileR = new FileReader( templateFile );
     StringTemplateGroup templates = new StringTemplateGroup( groupFileR );
     groupFileR.close();
-    */
-
+    StringTemplate t = templates.getInstanceOf( "function" );
+    CFunctionWalker listener = new CFunctionWalker( t );
+    
     ParseTreeWalker walker = new ParseTreeWalker( );
-    walker.walk( new CFunctionBaseListener(), tree );
-    return "Success!";
+    walker.walk( listener, tree );
+
+    return listener.out;
   }
 }

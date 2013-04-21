@@ -5,12 +5,15 @@ function : retType name args ;
 
 args :	 '(' arg (',' arg)* ')' ;
 
-arg 	: 	'double' name 	
-	|	'double' '*' name 
-	|	'int' name 	;
+arg 	
+  : 	'double' name 	# SCALAR_ARG
+	|	'double' '*' name # ARRAY_ARG
+	|	'int' name 	      # LENGTH_ARG
+  ; 
 
-retType	 :	'double' 	
-	|	'double' '*' 	
+retType	 
+  :	'double' 	        # SCALAR_RET
+	|	'double' '*' 	    # ARRAY_RET
 	;
 
 name : ID;

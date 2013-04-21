@@ -12,6 +12,10 @@ C wrapper for Python is based on the blog post by [Dan Foreman-Mackey](http://da
 Initial iteration only supports C functions returning scalar double and
 having arguments (all scalars, all arrays, single length argument). 
 
+_Update 20130421_: New version using ANTLR4.  See CFunction.g4,
+WrapperGenV4.java and CFunctionWalker.java.  Much simpler than the ANTLR3
+version due to not needing a separate tree grammar.
+
 Dependencies
 ============
 [ANTLRWorks](http://www.antlr.org/works/index.html) must be on the Java

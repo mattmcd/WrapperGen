@@ -5,11 +5,11 @@ all: CFunction.g WrapperWalker.g
 	antlr -o generated WrapperWalker.g
 	javac -cp $(CLASSPATH):generated -d classes Main.java WrapperGen.java generated/*.java
 
-v4:	CFunction.g4
+v4:	CFunction.g4 CFunctionWalker.java MainV4.java WrapperGenV4.java
 	mkdir -p generatedV4
 	mkdir -p classesV4
 	antlr4 -o generatedV4 CFunction.g4
-	javac -cp $(CLASSPATH):generatedv4 -d classesV4 MainV4.java WrapperGenV4.java generatedV4/*.java
+	javac -cp $(CLASSPATH):generatedv4 -d classesV4 MainV4.java WrapperGenV4.java CFunctionWalker.java generatedV4/*.java
 	
 run:
 	java -cp $(CLASSPATH):classes Main test2.txt
@@ -17,7 +17,9 @@ run:
 runV4:
 	java -cp $(CLASSPATH):classesV4 MainV4 test2.txt
 
-jar:
+jar: wrappergen.jar 
+
+wrappergen.jar: manifest.txt classes/Main.class
 	jar cfm wrappergen.jar manifest.txt -C classes .
 
 deploy: wrappergen.jar PythonWrapper.stg MEXWrapper.stg
